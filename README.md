@@ -1,57 +1,101 @@
-# Apple Health Data Converter (`.xml` to `.csv`)
 
-Convert XML health data from Apple's Health app to csv.
+# Apple Health to Garmin CSV (Python Version)
 
-You can export health data from [Apple's Health app](https://www.apple.com/ios/health/). 
-Unfortunately, the exported health data comes in XML format.
-This script reads the health data (in `.xml`) and produces a new file for you (in `.csv`).
+🩺→🖥→ 📊 A lightweight Python script to convert Apple Health export data into a Garmin-compatible CSV for weight tracking.
 
-## Usage
+## 📊 What it does
 
-```sh
-# Clone the repository
-$ git clone
+This script parses `export.xml` from Apple Health and extracts:
 
-# Navigate to the project directory
-$ cd applehealth
+- Body weight (kg)
+- Body Mass Index (BMI)
+- Body Fat Percentage (%)
 
-# Install the dependencies
-$ yarn install
-```
+Then it generates a `fitbit_full.csv` file compatible with Garmin Connect's Fitbit CSV import.
 
-Copy the Apple Health file you exported (`export.xml`) to the project directory.
+---
 
-```sh
-# Run the script
-$ yarn ts-node convert.ts 
-```
-
-## How it works
-
-The script reads the `export.xml` file and parses a subset of the records that match a filter.
-
-I'm looking for records of type `HKQuantityTypeIdentifierBodyMass` (i.e. weight records):
+## 📆 Example output
 
 ```
- <Record type="HKQuantityTypeIdentifierBodyMass" sourceName="Shortcuts" sourceVersion="1083.2" unit="kg" creationDate="2020-07-24 10:37:35 +0000" startDate="2020-07-24 10:37:00 +0000" endDate="2020-07-24 10:37:00 +0000" value="81.9"/>
+Body
+Date,Weight,BMI,Fat
+2023-07-01,82.5,24.9,15.3
+2023-07-03,82.2,25.1,14.7
 ```
 
-That means the script will only parse records of type `HKQuantityTypeIdentifierBodyMass` and convert them into a csv format. You can change the filter to match other types of records.
+---
 
-The script produces a new `weight.csv` file with two columns, "date", and "weight". 
+## 📅 How to use it
 
-For each row in the csv:
-- the `date` value is set to the `startDate` value from the XML record (in DD/MM/YYYY format), 
-- the `weight` value is set to the `value` value of the XML record in the same format.
+### 1. Export data from Apple Health
+- Open the Health app on your iPhone
+- Tap your profile (top right)
+- Scroll down and choose **Export All Health Data**
+- Save the `.zip` and extract `export.xml`
 
-## How to export health data from Apple's Health app
+### 2. Run the script
 
-Source: [Share your data in Health on iPhone](https://support.apple.com/en-gb/guide/iphone/iph5ede58c3d/ios)
- 
-> You can export all of your health and fitness data from Health in XML format, which is a common format for sharing data between apps.
-> 
-> 1. Tap your picture or initials at the top right.
-> 
->    If you don’t see your picture or initials, tap Summary or Browse at the bottom of the screen, then scroll to the top of the screen.
-> 
-> 2. Tap Export All Health Data, then choose a method for sharing your data.
+1. Install Python 3 (if not installed)
+2. Clone this repository
+3. Place `export.xml` next to the script
+4. Run:
+
+```bash
+python extract_body_data_for_fitbit.py
+```
+
+You will get `fitbit_full.csv`
+
+---
+
+## 📥 Upload to Garmin
+
+1. Go to: [https://connect.garmin.com/modern/weight](https://connect.garmin.com/modern/weight)
+2. Click ⚙️ **Import** (top right)
+3. Select **Fitbit CSV** format
+4. Upload the `fitbit_full.csv` file
+
+Your weight data will appear on the graph.
+
+---
+
+## 📊 Technical Details
+
+- Written in **pure Python 3**
+- Uses built-in libraries: `xml.etree.ElementTree`, `csv`, `datetime`
+- No dependencies
+
+Supports Apple Health types:
+- `HKQuantityTypeIdentifierBodyMass`
+- `HKQuantityTypeIdentifierBodyMassIndex`
+- `HKQuantityTypeIdentifierBodyFatPercentage`
+
+---
+
+## 👉 Russian / Русская версия
+
+### Для чего
+
+Скрипт на Python позволяет экспортировать вес, ИМТ и процент жира из Apple Health в CSV-формат, совместимый с Garmin.
+
+### Как использовать
+
+1. Экспорт данных в Health на iPhone
+2. Сохрани `export.xml`
+3. Скопируй его в папку скрипта
+4. Запусти в терминале:
+
+```bash
+python extract_body_data_for_fitbit.py
+```
+
+5. Файл `fitbit_full.csv` готов к загрузке в Garmin.
+
+---
+
+## 👤 Author
+
+Forked and rewritten in Python by [Your Name] — lightweight alternative to JavaScript-based Apple Health parsing tools.
+
+Original idea inspired by [arthurgousset/applehealth](https://github.com/arthurgousset/applehealth).
