@@ -96,6 +96,6 @@ python extract_body_data_for_fitbit.py
 
 ## 👤 Author
 
-Forked and rewritten in Python by [Your Name] — lightweight alternative to JavaScript-based Apple Health parsing tools.
+Forked and rewritten in Python by Mike Evdokimov — lightweight alternative to JavaScript-based Apple Health parsing tools.
 
 Original idea inspired by [arthurgousset/applehealth](https://github.com/arthurgousset/applehealth).
